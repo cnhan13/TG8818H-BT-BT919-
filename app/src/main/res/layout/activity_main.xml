@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <Button
+            android:id="@+id/btnScan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="扫描" />
+
+        <Button
+            android:id="@+id/btnStopScan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="停止扫描" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="当前模式:  ; 当前温度: " />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnGetDeviceMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获取设备信息" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvDeviceMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnGetSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获取设备信息" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <com.weiou.temperaturedemo.AutoNextLineLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btnChangeC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="切换摄氏度单位" />
+
+            <Button
+                android:id="@+id/btnChangeF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="切换华氏度单位" />
+
+            <Button
+                android:id="@+id/btnOpenBuzzer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打开蜂鸣器" />
+
+            <Button
+                android:id="@+id/btnCloseBuzzer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关闭蜂鸣器" />
+
+            <Button
+                android:id="@+id/btnOnOffDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="减少休眠时间" />
+
+            <Button
+                android:id="@+id/btnOnOffUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="增加休眠时间" />
+
+            <Button
+                android:id="@+id/btnTempDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="减小警告温度" />
+
+            <Button
+                android:id="@+id/btnTempUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="增加警告温度" />
+
+            <Button
+                android:id="@+id/btnOffsetDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="减小偏移值" />
+
+            <Button
+                android:id="@+id/btnOffsetUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="增加偏移值" />
+
+
+        </com.weiou.temperaturedemo.AutoNextLineLinearLayout>
+
+
+        <Button
+            android:text="获取设备历史记录"
+            android:id="@+id/btnHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/tvHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+
+
+
+
+</androidx.core.widget.NestedScrollView>
