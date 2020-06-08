@@ -1,8 +1,10 @@
 package com.weiou.temperaturedemo;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +26,7 @@ import com.weiou.lib_temp.TempBleCallback;
 import com.weiou.lib_temp.utils.DataUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +57,8 @@ public class MainActivity extends AppCompatActivity
     private MainViewModel model;
     private String unit = "";
 
+    public static final int REQUEST_CODE_ACCESS_COARSE_LOCATION = 1002;
+    public static final int REQUEST_CODE_ACCESS_FINE_LOCATION = 1003;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +72,38 @@ public class MainActivity extends AppCompatActivity
         adapter = new DeviceAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_ACCESS_COARSE_LOCATION);
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ACCESS_FINE_LOCATION);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+            }
+            case REQUEST_CODE_ACCESS_COARSE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     @Override
@@ -81,15 +120,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onDisconnect() {
-        runOnUiThread(() -> Toast.makeText(MainActivity.this, "BLE 已断开连接", Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(MainActivity.this, "BLE Disconnected", Toast.LENGTH_SHORT).show());
     }
 
     /**
-     * @param model 当前额温枪模式
+     * @param model Current forehead gun mode
      *              DataUtils.MODE_SURFACE
      *              DataUtils.MODE_ADULT
      *              DataUtils.MODE_CHILD
-     * @param temp  额温枪返回温度
+     * @param temp  Forehead gun return temperature
      */
     @Override
     public void onTempGet(int model, double temp) {
@@ -97,11 +136,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * 当前额温枪设备含有的模式
+     * Modes included in current forehead gun equipment
      *
-     * @param bit0 表面模式    0为不含 1为含有
-     * @param bit1 成人模式    0为不含 1为含有
-     * @param bit2 儿童模式    0为不含 1为含有
+     * @param bit0 Surface mode    0 is not included 1 is included
+     * @param bit1 Adult mode    0 is not included 1 is included
+     * @param bit2 Child mode    0 is not included 1 is included
      */
     @Override
     public void onDeviceMessageGet(Integer bit0, Integer bit1, Integer bit2) {
@@ -110,52 +149,52 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * 设备休眠
+     * Device sleep
      */
     @Override
     public void onOffline() {
-        runOnUiThread(() -> Toast.makeText(MainActivity.this, "设备已离线", Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Device is offline", Toast.LENGTH_SHORT).show());
     }
 
     /**
-     * 设备被唤醒
+     * The device is woken up
      */
     @Override
     public void onWakeUp() {
-        runOnUiThread(() -> Toast.makeText(MainActivity.this, "设备已唤醒", Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(MainActivity.this, "The device has woken up", Toast.LENGTH_SHORT).show());
     }
 
     /**
-     * 蓝牙异常代码返回
+     * Bluetooth exception code return
      *
-     * @param i 详情https://android.googlesource.com/platform/external/bluetooth/bluedroid/+/android-cts-5.1_r17/stack/include/gatt_api.h
+     * @param i Details https://android.googlesource.com/platform/external/bluetooth/bluedroid/+/android-cts-5.1_r17/stack/include/gatt_api.h
      */
     @Override
     public void onGATTErr(int i) {
-        runOnUiThread(() -> Toast.makeText(MainActivity.this, "异常码: " + i, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Exception code: " + i, Toast.LENGTH_SHORT).show());
     }
 
     /**
-     * 获取NFC返回数据
+     * Get NFC return data
      *
-     * @param cardType 卡类型
-     * @param cardSize 卡号长度
-     * @param cardNo   卡号
-     * @param target   00：表面模式
-     *                 01：成人模式
-     *                 02：儿童模式
-     * @param temp     温度
-     * @param unit     00: 摄氏度
-     *                 01：华氏度
+     * @param cardType Card type
+     * @param cardSize Card number length
+     * @param cardNo   Card number
+     * @param target   00：Surface mode
+     *                 01：Adult mode
+     *                 02：Child mode
+     * @param temp     Temperature
+     * @param unit     00: Celsius
+     *                 01：Fahrenheit
      */
     @Override
     public void onNFCGet(String cardType, int cardSize, String cardNo, String target, double temp, String unit) {
         runOnUiThread(() -> {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("卡类型:");
+            stringBuilder.append("Card type:");
             stringBuilder.append(cardType);
             stringBuilder.append("\n");
-            stringBuilder.append("卡长度:");
+            stringBuilder.append("Card length:");
             stringBuilder.append(cardSize);
             stringBuilder.append("\n");
             stringBuilder.append("target:");
@@ -177,15 +216,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onDeviceOffline() {
-        Toast.makeText(this, "请先唤醒设备", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Please wake up the device first", Toast.LENGTH_SHORT).show();
     }
 
     /**
-     * @param unit      "00"为摄氏度    "01"为华氏度
-     * @param offset    偏移值
-     * @param warmTemp  警告温度
-     * @param funBool   蜂鸣器开关      "00"为开   "01"为关
-     * @param sleepTime 休眠时间
+     * @param unit      "00"Degrees Celsius    "01"Fahrenheit
+     * @param offset    Offset value
+     * @param warmTemp  Warning temperature
+     * @param funBool   Buzzer switch      "00" for open   "01" for close
+     * @param sleepTime Sleep time
      */
     @Override
     public void onSettingGet(String unit, double offset, double warmTemp, String funBool, int sleepTime) {
@@ -195,7 +234,7 @@ public class MainActivity extends AppCompatActivity
 
 
     /**
-     * 历史记录列表
+     * History list
      * @param reportBeans
      */
     @Override
@@ -212,7 +251,7 @@ public class MainActivity extends AppCompatActivity
                 .subscribe(s -> tvHistory.setText(s));
     }
 
-    //扫描回调
+    //Scan callback
     private ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
@@ -230,19 +269,19 @@ public class MainActivity extends AppCompatActivity
             case R.id.btnGetDeviceMessage:
                 int deviceMessage = tempBle.getDeviceMessage();
                 if (deviceMessage == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnGetSetting:
                 int setting = tempBle.getSetting();
                 if (setting == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnHistory:
                 int history = tempBle.getDeviceListsMessage(DataUtils.MODE_SURFACE);
                 if (history == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -271,77 +310,77 @@ public class MainActivity extends AppCompatActivity
             case R.id.btnChangeC:
                 int setTempC = tempBle.setTempC();
                 if (setTempC == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnChangeF:
                 int setTempF = tempBle.setTempF();
                 if (setTempF == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnOpenBuzzer:
                 int openBuzzer = tempBle.openBuzzer();
                 if (openBuzzer == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnCloseBuzzer:
                 int closeBuzzer = tempBle.closeBuzzer();
                 if (closeBuzzer == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnOnOffDown:
                 int onOffDown = tempBle.onOffDown();
                 if (onOffDown == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnOnOffUp:
                 int onOffUp = tempBle.onOffUp();
                 if (onOffUp == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnTempDown:
                 if (TextUtils.isEmpty(unit)) {
-                    Toast.makeText(this, "请先获取设备信息", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please get device information first", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 int tempDown = tempBle.tempDown(unit);
                 if (tempDown == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnTempUp:
                 if (TextUtils.isEmpty(unit)) {
-                    Toast.makeText(this, "请先获取设备信息", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please get device information first", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 int tempUp = tempBle.tempUp(unit);
                 if (tempUp == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnOffsetDown:
                 if (TextUtils.isEmpty(unit)) {
-                    Toast.makeText(this, "请先获取设备信息", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please get device information first", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 int offsetDown = tempBle.offsetDown(unit);
                 if (offsetDown == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnOffsetUp:
                 if (TextUtils.isEmpty(unit)) {
-                    Toast.makeText(this, "请先获取设备信息", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please get device information first", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 int offsetUp = tempBle.offsetUp(unit);
                 if (offsetUp == DataUtils.CODE_SUCCESS) {
-                    Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sent successfully", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

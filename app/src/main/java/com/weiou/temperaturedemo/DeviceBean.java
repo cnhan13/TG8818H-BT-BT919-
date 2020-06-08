@@ -3,11 +3,11 @@ package com.weiou.temperaturedemo;
 import androidx.annotation.Nullable;
 
 public class DeviceBean {
-    //状态
-    private int status;//-1 为连接  1 连接
-    //名字
+    //status
+    private int status;//-1 not connected  1 connected
+    //first name
     private String name;
-    //mac地址
+    //mac address
     private String mac;
 
     DeviceBean(int status, String name, String mac) {

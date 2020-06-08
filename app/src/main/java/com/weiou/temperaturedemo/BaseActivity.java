@@ -35,23 +35,23 @@ public class BaseActivity extends AppCompatActivity {
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showRationale(PermissionRequest request) {
         request.proceed();
-        Log.e(TAG, "说明这个权限来干嘛的: ");
+        Log.e(TAG, "Explain what this authority does: ");
     }
 
     @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)
     void onDenied() {
-        Log.e(TAG, "用户拒绝: ");
+        Log.e(TAG, "User rejected: ");
     }
 
     @OnNeverAskAgain(Manifest.permission.ACCESS_FINE_LOCATION)
     void onNeverAskAgain() {
-        Log.e(TAG, "用户选择不再提示: ");
+        Log.e(TAG, "User chooses not to prompt again: ");
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // 代理权限处理到自动生成的方法
+        // Agent permission processing to automatic generation method
         BaseActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 }

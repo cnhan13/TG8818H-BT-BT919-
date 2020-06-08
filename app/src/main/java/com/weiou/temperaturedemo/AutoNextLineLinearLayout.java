@@ -43,10 +43,10 @@ public class AutoNextLineLinearLayout extends LinearLayout {
             final View child = getChildAt(i);
 
             child.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-// 此处增加onlayout中的换行判断，用于计算所需的高度
+// Add line break judgment in onlayout here，Used to calculate the required height
             int childw = child.getMeasuredWidth();
             int childh = child.getMeasuredHeight();
-            mX += childw; // 将每次子控件宽度进行统计叠加，如果大于设定的高度则需要换行，高度即Top坐标也需重新设置
+            mX += childw; // Statistical overlay of each sub-control width，If it is greater than the set height, you need to wrap，Height or Top coordinates also need to be reset
 
             Position position = new Position();
             mLeft = getPosition(i - j, i);
@@ -58,10 +58,10 @@ public class AutoNextLineLinearLayout extends LinearLayout {
                 mLeft = 0;
                 mRight = mLeft + child.getMeasuredWidth();
                 mTop = mY + 5;
-// PS：如果发现高度还是有问题就得自己再细调了
+// PS：If you find that the height is still a problem, you have to fine-tune
             }
             mBottom = mTop + child.getMeasuredHeight();
-            mY = mTop; // 每次的高度必须记录 否则控件会叠加到一起
+            mY = mTop; // Each altitude must be recorded Otherwise the controls will be superimposed together
             position.left = mLeft;
             position.top = mTop + 3;
             position.right = mRight;

@@ -138,7 +138,7 @@ private ScanCallback scanCallback = new ScanCallback() {
 
 ### 蓝牙交互相关
 
-#### 1.获取设备信息
+#### 1.Get device information
 
 ```java
 tempBle.getDeviceMessage()
@@ -154,9 +154,9 @@ tempBle.getSetting();
 
 ```java
 /**
-*	DataUtils.MODE_SURFACE 表面模式
-*	DataUtils.MODE_ADULT 成人模式
-*	DataUtils.MODE_CHILD 儿童模式
+*	DataUtils.MODE_SURFACE Surface mode
+*	DataUtils.MODE_ADULT Adult mode
+*	DataUtils.MODE_CHILD Child mode
 */
 tempBle.getDeviceListsMessage(DataUtils.MODE_SURFACE)
 ```
@@ -173,13 +173,13 @@ tempBle.setTempC();
 tempBle.setTempF();
 ```
 
-#### 6.打开蜂鸣器
+#### 6.Turn on the buzzer
 
 ```java
 tempBle.openBuzzer();
 ```
 
-#### 7.关闭蜂鸣器
+#### 7.Turn off the buzzer
 
 ```java
 tempBle.closeBuzzer();
@@ -191,48 +191,48 @@ tempBle.closeBuzzer();
 tempBle.onOffDown();
 ```
 
-#### 9.增加休眠时间
+#### 9.Increase sleep time
 
 ```java
 tempBle.onOffUp();
 ```
 
-#### 10.减小警告温度
+#### 10.Reduce warning temperature
 
 ```java
 /**
-* "00" 	摄氏度 
-* "01"	华氏度
+* "00" 	Celsius
+* "01"	Fahrenheit
 */
 tempBle.tempDown(unit);
 ```
 
-#### 11.增加警告温度
+#### 11.Increase warning temperature
 
 ```java
 /**
-* "00" 	摄氏度 
-* "01"	华氏度
+* "00" 	Celsius
+* "01"	Fahrenheit
 */
 tempBle.tempUp(unit);
 ```
 
-#### 12.减小偏移值
+#### 12.Decrease the offset value
 
 ```java
 /**
-* "00" 	摄氏度 
-* "01"	华氏度
+* "00" 	Celsius
+* "01"	Fahrenheit
 */
 tempBle.offsetDown(unit);
 ```
 
-#### 13.增加偏移值
+#### 13.Increase offset value
 
 ```java
 /**
-* "00" 	摄氏度 
-* "01"	华氏度
+* "00" 	Celsius
+* "01"	Fahrenheit
 */
 tempBle.offsetUp(unit)
 ```
@@ -244,7 +244,7 @@ tempBle.offsetUp(unit)
 > 上面的方法都有一个返回值
 >
 > ```java
-> // DataUtils.CODE_SUCCESS		发送成功
+> // DataUtils.CODE_SUCCESS		Sent successfully
 > // DataUtils.CODE_GATT_NULL		GATT为空
 > // DataUtils.CODE_CHARACTERISTIC_NULL		特征值为空
 > ```
@@ -269,7 +269,7 @@ public void onConnectSuccess(String mac) {
 ```java
 @Override
 public void onDisconnect() {
-    runOnUiThread(() -> Toast.makeText(MainActivity.this, "BLE 已断开连接", Toast.LENGTH_SHORT).show());
+    runOnUiThread(() -> Toast.makeText(MainActivity.this, "BLE Disconnected", Toast.LENGTH_SHORT).show());
 }
 ```
 
@@ -278,11 +278,11 @@ public void onDisconnect() {
 ```java
     /**
      *
-     * @param model 当前额温枪模式
+     * @param model Current forehead gun mode
      *                  DataUtils.MODE_SURFACE
      *                  DataUtils.MODE_ADULT
      *                  DataUtils.MODE_CHILD
-     * @param temp  额温枪返回温度
+     * @param temp  Forehead gun return temperature
      */
     @Override
     public void onTempGet(int model, double temp) {
@@ -294,10 +294,10 @@ public void onDisconnect() {
 
 ```java
     /**
-     * 当前额温枪设备含有的模式
-     * @param bit0  表面模式    0为不含 1为含有
-     * @param bit1  成人模式    0为不含 1为含有
-     * @param bit2  儿童模式    0为不含 1为含有
+     * Modes included in current forehead gun equipment
+     * @param bit0  Surface mode    0 is not included 1 is included
+     * @param bit1  Adult mode    0 is not included 1 is included
+     * @param bit2  Child mode    0 is not included 1 is included
      */
     @Override
     public void onDeviceMessageGet(Integer bit0, Integer bit1, Integer bit2) {
@@ -309,11 +309,11 @@ public void onDisconnect() {
 ```java
 /**
  * 
- * @param unit      "00"为摄氏度    "01"为华氏度
- * @param offset    偏移值
- * @param warmTemp  警告温度
- * @param funBool   蜂鸣器开关      "00"为开   "01"为关
- * @param sleepTime 休眠时间
+ * @param unit      "00"Degrees Celsius    "01"Fahrenheit
+ * @param offset    Offset value
+ * @param warmTemp  Warning temperature
+ * @param funBool   Buzzer switch      "00"为开   "01"为关
+ * @param sleepTime Sleep time
  */
 @Override
 public void onSettingGet(String unit, double offset, double warmTemp, String funBool, int sleepTime) {
@@ -348,7 +348,7 @@ public void onDeviceOffline() {
 ```java
 @Override
 public void onOffline() {
-    runOnUiThread(() -> Toast.makeText(MainActivity.this, "设备已离线", Toast.LENGTH_SHORT).show());
+    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Device is offline", Toast.LENGTH_SHORT).show());
 }
 ```
 
@@ -379,17 +379,17 @@ public void onGATTErr(int i) {
 
 ```java
 /**
- * 获取NFC返回数据
+ * Get NFC return data
  *
- * @param cardType 卡类型
- * @param cardSize 卡号长度
- * @param cardNo   卡号
- * @param target   00：表面模式
- *                 01：成人模式
- *                 02：儿童模式
- * @param temp     温度
- * @param unit     00: 摄氏度
- *                 01：华氏度
+ * @param cardType Card type
+ * @param cardSize Card number length
+ * @param cardNo   Card number
+ * @param target   00：Surface mode
+ *                 01：Adult mode
+ *                 02：Child mode
+ * @param temp     Temperature
+ * @param unit     00: Celsius
+ *                 01：Fahrenheit
  */
 @Override
 public void onNFCGet(String cardType, int cardSize, String cardNo, String target, double temp, String unit) {

@@ -24,13 +24,13 @@ public class MainViewModel extends AndroidViewModel {
     void setSetting(String unit, double offset, double warmTemp, String funBool, int sleepTime, TextView tvSetting) {
         Observable.create((ObservableOnSubscribe<String>) emitter -> {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(" 温度单位: ");
+            stringBuilder.append(" Temperature unit: ");
             if ("00".equals(unit)) {
-                stringBuilder.append("摄氏度 ");
+                stringBuilder.append("Celsius ");
             } else {
-                stringBuilder.append("华氏度");
+                stringBuilder.append("Fahrenheit");
             }
-            stringBuilder.append(" 偏移值: ");
+            stringBuilder.append(" Offset value: ");
             stringBuilder.append(offset);
             if ("00".equals(unit)) {
                 stringBuilder.append("°C");
@@ -38,7 +38,7 @@ public class MainViewModel extends AndroidViewModel {
                 stringBuilder.append("°F");
             }
 
-            stringBuilder.append(" 报警值: ");
+            stringBuilder.append(" Alarm value: ");
             stringBuilder.append(warmTemp);
             if ("00".equals(unit)) {
                 stringBuilder.append("°C");
@@ -46,16 +46,16 @@ public class MainViewModel extends AndroidViewModel {
                 stringBuilder.append("°F");
             }
 
-            stringBuilder.append(" 蜂鸣器: ");
+            stringBuilder.append(" Buzzer: ");
             if ("00".equals(funBool)) {
-                stringBuilder.append("开");
+                stringBuilder.append("Turn/is on");
             } else {
-                stringBuilder.append("关");
+                stringBuilder.append("Turn/is off");
             }
 
-            stringBuilder.append(" 休眠时间: ");
+            stringBuilder.append(" Sleep time: ");
             stringBuilder.append(sleepTime);
-            stringBuilder.append("秒");
+            stringBuilder.append("second");
             emitter.onNext(stringBuilder.toString());
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -67,13 +67,13 @@ public class MainViewModel extends AndroidViewModel {
         Observable.create((ObservableOnSubscribe<String>) emitter -> {
             String mModel;
             if (model == DataUtils.MODE_SURFACE) {
-                mModel = "表面模式";
+                mModel = "Surface mode";
             } else if (model == DataUtils.MODE_ADULT) {
-                mModel = "成人模式";
+                mModel = "Adult mode";
             } else {
-                mModel = "儿童模式";
+                mModel = "Child mode";
             }
-            String s = "当前模式:" + mModel + ";   当前温度: " + temp + "°C";
+            String s = "Current Mode:" + mModel + ";   Current Temperature: " + temp + "°C";
             emitter.onNext(s);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -82,15 +82,15 @@ public class MainViewModel extends AndroidViewModel {
 
     void setDeviceMessage(Integer bit0, Integer bit1, Integer bit2, AppCompatTextView tvDeviceMessage) {
         Observable.create((ObservableOnSubscribe<String>) emitter -> {
-            StringBuilder stringBuilder = new StringBuilder("该设备包含:");
+            StringBuilder stringBuilder = new StringBuilder("The device contains:");
             if (bit0 == 1) {
-                stringBuilder.append("表面模式 ");
+                stringBuilder.append("Surface mode ");
             }
             if (bit0 == 1) {
-                stringBuilder.append("成人模式 ");
+                stringBuilder.append("Adult mode ");
             }
             if (bit0 == 1) {
-                stringBuilder.append("儿童模式 ");
+                stringBuilder.append("Child mode ");
             }
             emitter.onNext(stringBuilder.toString());
         }).subscribeOn(Schedulers.io())
